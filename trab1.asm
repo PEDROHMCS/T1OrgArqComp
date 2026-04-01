@@ -5,6 +5,8 @@
 	next_id: .word 2 #contador para IDs
 	
 	#outputs da interface
+	msg_encontrado: .asciz "Vagao encontrado!\n"
+	msg_nao_encontrado: .asciz "Vagao nao encontrado.\n"
 	
 	.text
 	.align 2
@@ -130,3 +132,54 @@ remove_executa:
 
 fim_remove:
 	jalr zero, 0(ra)
+
+# BUSCA(a0 = id de busca)
+
+
+busca_por_id:
+	# copia o id que o usuario quer buscar
+	add t0, a0, zero
+	
+	# carrega o endereco de ptr_head no registrador t1
+	la t1, ptr_head
+	
+	lw t1, 0(t1)
+	
+loop_busca:
+	#compara o t1 com zero, se for igual nao achamos o vagao, salta pra nao achou
+	beq t1, zero, nao_achou
+	
+	## armazena o id do vagao
+	lw t2, 0(t1)
+	
+	# verifica se o id do vagao e igual ao do t0, que o usuario ta buscando
+	beq t2, t0, achou
+	
+	# le o endereco no deslocamento 8, ponteiro pro proximo e atualiza o proprio t1 com esse endereco
+	lw t1, 8(t1)
+	
+	# retorna a fazer o loop
+	jal zero, loop_busca
+
+achou:
+	# codigo 4 no a7 é para avisar o sistema que queremos imprimir texto
+	addi a7, zero, 4
+	# carrega o endereco do texto em a0
+	la a0, msg_encontrado
+	# executa
+	ecall
+	
+	#retorna para a main
+	jalr zero, 0(ra)
+
+nao_achou:
+	# codigo 4 no a7 é para avisar o sistema que queremos imprimir texto
+	addi a7, zero, 4
+	# carrega o endereco do texto em a0
+	la a0, msg_nao_encontrado
+	# executa
+	ecall
+	
+	#retorna para a main
+	jalr zero, 0(ra)
+	
