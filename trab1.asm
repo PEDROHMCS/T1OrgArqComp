@@ -47,11 +47,11 @@ construtor:
 	jalr zero, 0(ra)
 
 # ================ INSERÇÃO ====================		
-new_no:
+insert_final:
 	# Argumentos esperados
-	# a0 = Tipo do vagï¿½o
+	# a0 = Tipo do vagao
 
-	add t4, zero, a0 # guarda o tipo do vagï¿½o no registrador temporï¿½rio
+	add t4, zero, a0 # guarda o tipo do vagao no registrador temporario
 	
 	# Alocar os bytes na heap
 	addi a7, zero, 9
@@ -59,41 +59,81 @@ new_no:
 	ecall
 	
 	# Ler o valor do Id atual e escrever na heap
-	la t1, next_id # t1 recebe o endereï¿½o de next_id
+	la t1, next_id # t1 recebe o endereco de next_id
 	lw t3, 0(t1) # t3 recebe o valor do id atual
 	sw t3, 0(a0) # escreve o valor do id atual nos 4 primeiros bytes
 	
 	# Incrementar valor do next_Id
-	addi t3, t3, 1 # incrementa o id para o prï¿½ximo nï¿½
-	sw t3, 0(t1) # atualiza o valor de next_id
+	addi t3, t3, 1
+	sw t3, 0(t1)
 	
-	# Escrever o tipo do vagï¿½o na heap
-	sw t4, 4(a0) # escreve o tipo do vagï¿½o nos bytes 4 - 7
-	sw zero, 8(a0) # escreve o valor 0 nos bytes do ponteiro para o prï¿½ximo vagï¿½o
+	# Escrever o tipo do vagao na heap
+	sw t4, 4(a0) # escreve o tipo do vagao nos bytes 4 - 7
 	
-	la t1, ptr_head # t1 recebe o endereï¿½o de ptr_head
-	lw t0, 0(t1) # t0 recebe o conteï¿½do de head
-	# programa entra na funï¿½ï¿½o de busca do ï¿½ltimo nï¿½
+	# Escrever zero no ponteiro para o proximo vagao (pois e o ultimo)
+	sw zero, 8(a0)
+	
+	# Buscar o ultimo vagao
+	la t1, ptr_head # t1 recebe o endereco de ptr_head
+	lw t0, 0(t1) # t0 recebe o conteudo de head
 
-search_last:
-	lw t1, 8(t0) # t1 lï¿½ o ponteiro para o prï¿½ximo nï¿½ do vagï¿½o atual
+busca_ultimo:
+	lw t1, 8(t0) # t1 le o ponteiro para o proximo no do vagao atual
 	
-	# Verificar se o valor ï¿½ 0 (se sim, significa que ï¿½ o ï¿½ltimo vagï¿½o)
-	beq t1, zero, link_no
+	# Verificar se o valor = 0 (se sim, significa que e o ultimo vagao)
+	beq t1, zero, link_final
 	
-	# Se nï¿½o for zero, percorre a lista
-	add t0, t1, zero #t0 recebe o endereï¿½o guardado no ponteiro para o prï¿½ximo vagï¿½o
-	jal zero, search_last
+	# Se nao for zero, continua a percorrer a lista
+	add t0, t1, zero #t0 recebe o endereco guardado no ponteiro para o proximo vagao
+	jal zero, busca_ultimo
 
-link_no:
-	# Guardar o endereï¿½o do nï¿½ atual no ponteiro do anterior
+link_final:
+	# Guardar o endereco do vagao atual no ponteiro do anterior
 	sw a0, 8(t0)
 	
 	# Retornar para a main
 	jalr zero, 0(ra)
+
+insert_inicio:
+	# Argumentos esperados
+	# a0 = Tipo do vagao
+
+	add t4, zero, a0 # guarda o tipo do vagao no registrador temporario
 	
+	# Alocar os bytes na heap
+	addi a7, zero, 9
+	addi a0, zero, 12
+	ecall
+	
+	# Ler o valor do Id atual e escrever na heap
+	la t1, next_id # t1 recebe o endereco de next_id
+	lw t3, 0(t1) # t3 recebe o valor do id atual
+	sw t3, 0(a0) # escreve o valor do id atual nos 4 primeiros bytes
+	
+	# Incrementar valor do next_Id
+	addi t3, t3, 1
+	sw t3, 0(t1)
+	
+	# Escrever o tipo do vagao na heap
+	sw t4, 4(a0) # escreve o tipo do vagao nos bytes 4 - 7
+	
+	# Acessar a locomotiva
+	la t1, ptr_head
+	lw t0, 0(t1)
+	
+	# Acessar o antigo primeiro vagao
+	lw t2, 8(t0)
+	
+	# Liga o antigo primeiro vagao ao novo vagao
+	sw t2, 8(a0)
+	
+	# Liga o novo vagao a locomotiva
+	sw a0, 8(t0)
+	
+	#Retorna para a main
+	jalr zero, 0(ra)
 # ================ REMOÇÃO ====================
-	
+
 remove_no:
 	add t0, a0, zero # Copia o id que queremos apagar para t0
 	
