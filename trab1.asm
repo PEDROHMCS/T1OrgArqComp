@@ -7,6 +7,8 @@
 	#outputs da interface
 	msg_encontrado: .asciz "Vagao encontrado!\n"
 	msg_nao_encontrado: .asciz "Vagao nao encontrado.\n"
+	msg_printID: .asciz "ID do vagão: \n"
+	msg_printCOD: .asciz "Codigo do vagao: \n"
 	
 	.text
 	.align 2
@@ -43,7 +45,8 @@ construtor:
 	
 	# Voltar para a main
 	jalr zero, 0(ra)
-		
+
+# ================ INSERÇÃO ====================		
 new_no:
 	# Argumentos esperados
 	# a0 = Tipo do vagï¿½o
@@ -89,8 +92,7 @@ link_no:
 	# Retornar para a main
 	jalr zero, 0(ra)
 	
-	
-# ================ REMOÃ‡ÃƒO ====================
+# ================ REMOÇÃO ====================
 	
 remove_no:
 	add t0, a0, zero # Copia o id que queremos apagar para t0
@@ -133,10 +135,10 @@ remove_executa:
 fim_remove:
 	jalr zero, 0(ra)
 
-# BUSCA(a0 = id de busca)
+# ================ BUSCA ====================
 
-
-busca_por_id:
+busca_por_id:	
+	#a0 = id de busca
 	# copia o id que o usuario quer buscar
 	add t0, a0, zero
 	
@@ -182,4 +184,44 @@ nao_achou:
 	
 	#retorna para a main
 	jalr zero, 0(ra)
+
+# ================ EXIBIÇÃO ====================
+
+printTrain:
+	# Inicia a partir do começo da lista (locomotiva)
+	la t1, ptr_head
+	lw t0, 8(t1) # t1 recebe o valor do ponteiro para o próximo vagão
+
+loop_printTrain:
+	# Verificar se o valor do ponteiro é 0 (se sim, significa que é o último vagão)
+	beq t0, zero, fim_printTrain
 	
+	# Se não for o final do trem, imprime os campos
+	# Imprime o texto de ID do vagão
+	addi a7, zero, 4
+	la a0, msg_printID
+	ecall
+	
+	#Imprime o ID do vagão
+	lw t2, 0(t0)
+	add a0, zero, t2
+	addi a7, zero, 1
+	ecall
+	
+	# Imprime o texto de código do vagão
+	addi a7, zero, 4
+	la a0, msg_printCOD
+	ecall
+	
+	#Imprime o código do vagão
+	addi a0, t0, 4 #passa o endereço do byte 4
+	addi a7, zero, 4
+	ecall
+	
+	#Vai para o próximo vagão
+	lw t0, 8(t0)
+	jal zero, loop_printTrain
+
+fim_printTrain:
+	# retorna para a main
+	jalr zero, 0(ra)
