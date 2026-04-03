@@ -8,7 +8,7 @@
 	msg_boas_vindas: .asciz "Bem-vindo ao jogo: Montagem de Trem\n"
 	msg_id_usuario: .asciz "Digite o ID do vagão: \n"
 	msg_tipo_vagao: .asciz "Digite o tipo do vagão (1 - Locomotiva | 2 - Carga | 3 - Passageiro | 4 - Combustível): \n"
-	msg_menu: .asciz "\n------ Menu ------\n1 - Adicionar vagão no início\n2 - Adicionar vagão no final\n3 - Remover vagão por ID\n4 - Listar trem\n5 - Buscar vagão\n6 - Sair\nEscolha uma opção: "
+	msg_menu: .asciz "\n------------ Menu ------------\n1 - Adicionar vagão no início\n2 - Adicionar vagão no final\n3 - Remover vagão por ID\n4 - Listar trem\n5 - Buscar vagão\n6 - Sair\n\nEscolha uma opção: "
 	msg_opcao_invalida: .asciz "Opção inválida! Tente novamente.\n"
 	msg_sair: .asciz "Saindo do jogo. Até logo!\n"
 
