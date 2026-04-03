@@ -280,7 +280,6 @@ fim_remove:
 	jalr zero, 0(ra)
 
 # ================ BUSCA ================
-
 busca_por_id:	
 	#a0 = id de busca
 	#copia o id que o usuário quer buscar
