@@ -61,7 +61,7 @@ loop_escolha_menu:
 	beq a0, t0, chamar_buscar #se a0 = 5, pula para a função buscar
 
 	li t0, 6 #carrega 6 em t0 (registrador temporário)
-	beq a0, t0, encerrar_jogo #compara a0 com t0, se se forem iguais, pula para "encerrar_jogo"
+	beq a0, t0, encerrar_jogo #compara a0 com t0, se forem iguais, pula para "encerrar_jogo"
 
 	#se nenhuma opção válida for digitada (nenhum beq acima foi ativado), então:
 	li a7, 4 #carrega o serviço de impressão de string (código ecall 4) em a7
