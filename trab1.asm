@@ -46,24 +46,24 @@ loop_escolha_menu:
 
 	#desvia para a função correta comparando com a entrada (a0)
 	li t0, 1 #carrega 1 em t0 (registrador temporário)
-	beq a0, t0, chamar_insert_inicio #se a0 = 1, pula para a função adicionar no início
+	beq a0, t0, chamar_insert_inicio #se a0 == 1, pula para a função adicionar no início
 
-	li t0, 2 #carrega 2 em t0 (registrador temporário)
-	beq a0, t0, chamar_insert_final #se a0 = 2, pula para a função adicionar no final
+	li t0, 2 #carrega 2 em t0 
+	beq a0, t0, chamar_insert_final #se a0 == 2, pula para a função adicionar no final
 
-	li t0, 3 #carrega 3 em t0 (registrador temporário)
-	beq a0, t0, chamar_remover #se a0 = 3, pula para a função remover
+	li t0, 3 #carrega 3 em t0 
+	beq a0, t0, chamar_remover #se a0 == 3, pula para a função remover
 
-	li t0, 4 #carrega 4 em t0 (registrador temporário)
-	beq a0, t0, chamar_listar #se a0 = 4, pula para a função listar
+	li t0, 4 #carrega 4 em t0 
+	beq a0, t0, chamar_listar #se a0 == 4, pula para a função listar
 
-	li t0, 5 #carrega 5 em t0 (registrador temporário)
-	beq a0, t0, chamar_buscar #se a0 = 5, pula para a função buscar
+	li t0, 5 #carrega 5 em t0 
+	beq a0, t0, chamar_buscar #se a0 == 5, pula para a função buscar
 
-	li t0, 6 #carrega 6 em t0 (registrador temporário)
+	li t0, 6 #carrega 6 em t0 
 	beq a0, t0, encerrar_jogo #compara a0 com t0, se forem iguais, pula para "encerrar_jogo"
 
-	#se nenhuma opção válida for digitada (nenhum beq acima foi ativado), então:
+	#se nenhuma opção válida for digitada (nenhum beq acima for ativado), então:
 	li a7, 4 #carrega o serviço de impressão de string (código ecall 4) em a7
 	la a0, msg_opcao_invalida #carrega o endereço de "msg_opcao_invalida" em a0
 	ecall #executa o comando de impressão
@@ -332,7 +332,7 @@ nao_achou:
 printTrain:
 	#inicia a partir do começo da lista (locomotiva)
 	la t1, ptr_head
-	lw t0, 8(t1) #t1 recebe o valor do ponteiro para o próximo vagão
+	lw t0, 0(t1) #t0 recebe o endereço da locomotiva (início do trem)
 
 loop_printTrain:
 	#verificar se o valor do ponteiro é 0 (se sim, significa que é o último vagão)
@@ -347,7 +347,7 @@ loop_printTrain:
 	#imprime o id do vagão
 	lw t2, 0(t0)
 	add a0, zero, t2
-	addi a7, zero, 1
+	li a7, 1
 	ecall
 	
 	#imprime o texto de código do vagão
@@ -356,10 +356,10 @@ loop_printTrain:
 	ecall
 	
 	#imprime o código do vagão
-	addi a0, t0, 4 #passa o endereço do byte 4
-	addi a7, zero, 4
+	lw a0, 4(t0) #lê o número guardado no offset 4
+	li a7, 1 
 	ecall
-	
+
 	#vai para o próximo vagão
 	lw t0, 8(t0)
 	jal zero, loop_printTrain
