@@ -8,7 +8,7 @@ O projeto implementa o jogo **"Montagem de Trem"** em Assembly RISC-V. Este repo
 
 * **Pedro Marques**
 * **Mariane Ferreira**
-* **Pablo Viera**
+* **Pablo Vieira**
 
 
 ## 3. Ferramentas Utilizadas
