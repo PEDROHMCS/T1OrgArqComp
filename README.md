@@ -20,4 +20,4 @@ O projeto implementa o jogo **"Montagem de Trem"** em Assembly RISC-V. Este repo
 
 1. Clone este repositório:
    ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+   git clone [https://github.com/PEDROHMCS/T1OrgArqComp](https://github.com/PEDROHMCS/T1OrgArqComp)
